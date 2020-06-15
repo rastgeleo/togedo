@@ -1,0 +1,18 @@
+{% extends parent_template|default:"todo/base_todo.html" %}
+
+{% block title %}
+{{ block.super }} - Task Detail
+{% endblock %}
+
+{% block content %}
+<h3> {{ task.name }} </h3>
+<p> {{ task.text }} </p>
+<p> Due {{ task.due|date:"H:i l jS N" }}</p>
+<p> Completed: {{ task.completed }}</p>
+<div>
+<ul>
+<li><a href="{{ task.get_update_url }}">Edit</a></li>
+<li><a href="{{ task.get_delete_url }}">Delete</a></li>
+</div>
+</ul>
+{% endblock %}

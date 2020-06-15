@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>
+            {% block title %}
+            Togedo
+            {% endblock %}
+        </title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <nav>
+            <ul>
+                <li><a href="{% url 'task_main' %}">Home</a></li>
+                <li><a href="{% url 'todo:task_list' %}">Tasks</a></li>
+                <li><a href="{% url 'todo:task_completed_list' %}">Completed Tasks</a></li>
+            </ul>
+        </nav>
+        {% block content %}
+
+        {% endblock %}
+    </body>
+</html>

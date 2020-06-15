@@ -1,0 +1,20 @@
+{% extends parent_template|default:"todo/base_todo.html" %}
+{% block title %}
+{{ block.super }} - All Tasks
+{% endblock %}
+
+{% block content %}
+<h1>Tasks</h1>
+<ul>
+    {% for task in task_list %}
+    <li>
+        <a href="{{ task.get_absolute_url }}">{{ task.name }}</a>
+         Due: {{ task.due }} 
+        <a href="{{ task.get_update_url }}">Edit</a>
+        <a href="{{ task.get_delete_url }}">Delete</a>
+    </li>
+    {% empty %}
+    <li>There is no task to do.</li>
+    {% endfor %}
+</ul>
+{% endblock %}
