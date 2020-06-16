@@ -1,6 +1,5 @@
-from datetime import datetime
-
 from django.shortcuts import render, redirect
+from django.utils import timezone
 from django.urls import reverse_lazy
 from django.views.generic import View
 from django.views.generic import ListView, CreateView, DetailView, UpdateView,\
@@ -45,7 +44,7 @@ class TaskCompletedList(ListView):
 class TaskOverdueList(ListView):
     queryset = Task.objects.filter(
         completed=False,
-        due__lt=datetime.now()
+        due__lt=timezone.now()
         )
     extra_context = {'heading': 'Overdue Tasks'}
 

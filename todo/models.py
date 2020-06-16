@@ -1,7 +1,6 @@
-from datetime import datetime
-
 from django.db import models
 from django.urls import reverse
+from django.utils import timezone
 
 
 # Create your models here.
@@ -27,7 +26,10 @@ class Task(models.Model):
     )
 
     def __str__(self):
-        return "{}: {}".format(self.name, self.due.strftime('%Y-%m-%d %H:%M'))
+        return "{}: {}".format(
+            self.name,
+            self.due.strftime('%Y-%m-%d %H:%M')
+            )
 
     def get_absolute_url(self):
         return reverse('todo:task_detail', kwargs={'slug': self.slug})
@@ -42,4 +44,4 @@ class Task(models.Model):
         return reverse('todo:task_delete', kwargs={'slug': self.slug})
 
     def isoverdue(self):
-        return not self.completed and self.due < datetime.now()
+        return (not self.completed) and (self.due < timezone.now())
