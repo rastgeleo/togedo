@@ -55,6 +55,32 @@ class TaskMainTest(TestCase):
         self.assertEqual(Task.objects.count(), 0)
 
 
+class TaskOverdueTest(TestCase):
+
+    def test_uses_list_template(self):
+        response = self.client.get('/todo/overdue/')
+        self.assertTemplateUsed(response, 'todo/task_list.html')
+
+    def test_display_overdue_task(self):
+        Task.objects.create(
+            name='overdue item',
+            text='a bit late',
+            slug='overdue-item',
+            due=timezone.now() - timedelta(days=3),
+            completed=False
+        )
+        Task.objects.create(
+            name='non overdue item',
+            text='a bit late',
+            slug='non-overdue-item',
+            due=timezone.now() + timedelta(days=3),
+            completed=False
+        )
+        response = self.client.get('/todo/overdue/')
+        self.assertIn('overdue item', response.content.decode())
+        self.assertNotIn('non overdue item', response.content.decode())
+
+
 class TaskModelTest(TestCase):
 
     def test_saving_and_retrieving_items(self):

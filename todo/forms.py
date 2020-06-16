@@ -7,9 +7,18 @@ from .models import Task
 
 
 class TaskForm(forms.ModelForm):
+
     class Meta:
         model = Task
         exclude = ('slug', 'completed')
+        widgets = {
+            'name': forms.TextInput(attrs={
+                'id': 'id_name', 'placeholder': 'Add a task'}),
+            'text': forms.Textarea(attrs={
+                'id': 'id_text', 'placeholder': 'Add a description'}),
+            'due': forms.DateTimeInput(attrs={
+                'id': 'id_due', 'placeholder': 'YYYY-MM-DD HH:MM:SS'})
+        }
 
     def save(self, commit=True):
         task = super().save(commit=False)

@@ -10,7 +10,10 @@ class Task(models.Model):
         max_length=63,
         unique=True
     )
-    text = models.TextField()
+    text = models.TextField(
+        'description',
+        blank=True
+    )
     createdat = models.DateTimeField(
         'date created',
         auto_now_add=True

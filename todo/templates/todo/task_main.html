@@ -14,7 +14,7 @@
     </form>
 </div>
 <h2>All tasks</h2>
-<ul>
+<ul id="id_task_list">
     {% for task in task_list %}
     <li>
         <a href="{{ task.get_absolute_url }}">{{ task.name }}</a>
