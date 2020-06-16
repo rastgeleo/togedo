@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import View
@@ -14,7 +16,7 @@ class TaskMain(View):
     model = Task
 
     def get(self, request):
-        queryset = self.model.objects.filter(completed=False)
+        queryset = self.model.objects.filter(completed=False).order_by('due')
         context = {'form': self.form_class(), 'task_list': queryset}
         return render(request, self.template_name, context=context)
 
@@ -24,18 +26,28 @@ class TaskMain(View):
             bound_form.save()
             return redirect('task_main')
         else:
-            queryset = self.model.objects.filter(completed=False)
+            queryset = (self.model.objects.filter(completed=False)
+                        .order_by('due'))
             context = {'form': bound_form, 'task_list': queryset}
             return render(request, self.template_name, context=context)
 
 
 class TaskList(ListView):
-    queryset = Task.objects.filter(completed=False)
+    queryset = Task.objects.filter(completed=False).order_by('due')
+    extra_context = {'heading': 'All Tasks'}    # heading for template
 
 
 class TaskCompletedList(ListView):
     queryset = Task.objects.filter(completed=True)
-    template_name = 'todo/task_completed_list.html'
+    extra_context = {'heading': 'Completed Tasks'}
+
+
+class TaskOverdueList(ListView):
+    queryset = Task.objects.filter(
+        completed=False,
+        due__lt=datetime.now()
+        )
+    extra_context = {'heading': 'Overdue Tasks'}
 
 
 class TaskDetail(DetailView):

@@ -9,6 +9,11 @@ urlpatterns = [
         'completed/',
         views.TaskCompletedList.as_view(),
         name='task_completed_list'),
+    path(
+        'overdue/',
+        views.TaskOverdueList.as_view(),
+        name='task_overdue_list'
+    ),
     path('create/', views.TaskCreate.as_view(), name='task_create'),
     path('<slug:slug>/', views.TaskDetail.as_view(), name='task_detail'),
     path(

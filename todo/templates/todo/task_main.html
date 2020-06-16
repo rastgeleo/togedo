@@ -18,7 +18,9 @@
     {% for task in task_list %}
     <li>
         <a href="{{ task.get_absolute_url }}">{{ task.name }}</a>
-         Due: {{ task.due }} 
+        {% if task.due %} 
+            Due: {{ task.due|date:"H:i l jS N Y" }} 
+        {% endif %}
         <a href="{{ task.get_update_url }}">Edit</a>
         <a href="{{ task.get_delete_url }}">Delete</a>
     </li>

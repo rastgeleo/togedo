@@ -7,7 +7,9 @@
 {% block content %}
 <h3> {{ task.name }} </h3>
 <p> {{ task.text }} </p>
-<p> Due {{ task.due|date:"H:i l jS N" }}</p>
+{% if task.due %}
+    <p> Due: {{ task.due|date:"H:i l jS N" }}</p>
+{% endif %}
 <p> Completed: {{ task.completed }}</p>
 <div>
 <ul>

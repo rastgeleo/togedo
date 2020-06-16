@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.db import models
 from django.urls import reverse
 
@@ -38,3 +40,6 @@ class Task(models.Model):
 
     def get_delete_url(self):
         return reverse('todo:task_delete', kwargs={'slug': self.slug})
+
+    def isoverdue(self):
+        return not self.completed and self.due < datetime.now()
