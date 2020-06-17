@@ -20,6 +20,6 @@ from todo import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('todo/', include('todo.urls')),
+    path('list/', include('todo.urls')),
     path('', views.TaskMain.as_view(), name='task_main')
 ]

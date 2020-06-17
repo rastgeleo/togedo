@@ -3,7 +3,35 @@ from django.urls import reverse
 from django.utils import timezone
 
 
-# Create your models here.
+class TaskList(models.Model):
+    name = models.CharField(
+        'list name',
+        max_length=63,
+        unique=True
+    )
+    slug = models.SlugField(
+        'slug for list',
+        max_length=63,
+        unique=True
+    )
+    createdat = models.DateTimeField(
+        'list created time',
+        auto_now_add=True
+    )
+
+    def __str__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return reverse(
+            'todo:tasklist_detail',
+            kwargs={'slug': self.slug}
+            )
+
+    def get_task_create_url(self):
+        return reverse('todo:task_create', kwargs={'list_slug': self.slug})
+
+
 class Task(models.Model):
     name = models.CharField(max_length=63)
     slug = models.SlugField(
@@ -27,6 +55,10 @@ class Task(models.Model):
         'completed',
         default=False
     )
+    tasklist = models.ForeignKey(
+        TaskList,
+        on_delete=models.CASCADE
+    )
 
     def __str__(self):
         return "{}: {}".format(
@@ -35,16 +67,20 @@ class Task(models.Model):
             )
 
     def get_absolute_url(self):
-        return reverse('todo:task_detail', kwargs={'slug': self.slug})
+        return reverse(
+            'todo:task_detail',
+            kwargs={'list_slug': self.tasklist.slug, 'task_slug': self.slug}
+            )
 
-    def get_create_url(self):
-        return reverse('todo:task_create')
+    # def get_create_url(self):
+    #     return reverse('todo:task_create')
 
-    def get_update_url(self):
-        return reverse('todo:task_update', kwargs={'slug': self.slug})
+    # def get_update_url(self):
+    #     return reverse('todo:task_update', kwargs={'slug': self.slug})
 
-    def get_delete_url(self):
-        return reverse('todo:task_delete', kwargs={'slug': self.slug})
+    # def get_delete_url(self):
+    #     return reverse('todo:task_delete', kwargs={'slug': self.slug})
 
-    def isoverdue(self):
-        return (not self.completed) and (self.due < timezone.now())
+    # def isoverdue(self):
+    #     return (not self.completed) and (self.due < timezone.now())
+

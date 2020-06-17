@@ -1,9 +1,10 @@
 from django.utils import timezone
 
 from django import forms
+from django.core.exceptions import ValidationError
 from django.utils.text import slugify
 
-from .models import Task
+from .models import Task, TaskList
 
 
 class TaskForm(forms.ModelForm):
@@ -33,3 +34,24 @@ class TaskForm(forms.ModelForm):
 class TaskUpdateForm(TaskForm):
     class Meta(TaskForm.Meta):
         exclude = ('slug',)
+
+
+class TaskListForm(forms.ModelForm):
+
+    class Meta:
+        model = TaskList
+        exclude = ('slug',)
+
+    def clean_name(self):
+        new_name = self.cleaned_data['name']
+        if new_name == 'create':
+            raise ValidationError('list name can not be "create".')
+        return new_name
+
+    def save(self, commit=True):
+        tasklist = super().save(commit=False)
+        if not tasklist.pk:
+            tasklist.slug = slugify(tasklist.name)
+        tasklist.save()
+        self.save_m2m()
+        return tasklist

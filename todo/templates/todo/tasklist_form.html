@@ -1,13 +1,13 @@
 {% extends parent_template|default:"todo/base_todo.html" %}
 
 {% block title %}
-{{ block.super }} - Create Task
+{{ block.super }} - Create New List
 {% endblock %}
 
 {% block content %}
-<form action="{{ tasklist.get_task_create_url }}" method="post">
+<form action="{% url 'todo:tasklist_create' %}" method="post">
     {% csrf_token %}
     {{ form.as_p }}
-    <input type="submit" value="Add Task"/>
+    <input type="submit" value="Add List"/>
 </form>
 {% endblock %}

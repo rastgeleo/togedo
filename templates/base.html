@@ -13,9 +13,7 @@
         <nav>
             <ul>
                 <li><a href="{% url 'task_main' %}">Home</a></li>
-                <li><a href="{% url 'todo:task_list' %}">Tasks</a></li>
-                <li><a href="{% url 'todo:task_overdue_list' %}">Overdue Tasks</a></li>
-                <li><a href="{% url 'todo:task_completed_list' %}">Completed Tasks</a></li>
+                <li><a href="{% url 'todo:tasklist_list' %}">Lists</a></li>
             </ul>
         </nav>
         {% block content %}
