@@ -1,13 +1,16 @@
 {% extends parent_template|default:"todo/base_todo.html" %}
 {% block title %}
-{{ block.super }} - {{ tasklist.name }}
+{{ block.super }} - List:{{ tasklist.name }}
 {% endblock %}
 
 {% block content %}
-<h1>Tasks</h1>
+<h1>List: {{ tasklist.name|title }}</h1>
 <ul>
     <li>
         <a href="{{ tasklist.get_task_create_url }}">New Task</a>
+    </li>
+    <li>
+        <a href="{{ tasklist.get_update_url }}">Edit List</a>
     </li>
 </ul>
 <ul>
@@ -17,8 +20,8 @@
         {% if task.due %} 
             Due: {{ task.due|date:"H:i l jS N Y" }} 
         {% endif %}
-        <a href="">Edit</a>
-        <a href="">Delete</a>
+        <a href="{{ task.get_update_url }}">Edit</a>
+        <a href="{{ task.get_delete_url }}">Delete</a>
     </li>
     {% empty %}
     <li>There is no task in this list.</li>

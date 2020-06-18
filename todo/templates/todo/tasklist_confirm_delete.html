@@ -1,0 +1,14 @@
+{% extends parent_template|default:"todo/base_todo.html" %}
+
+{% block title %}
+{{ block.super }} - Delete List
+{% endblock %}
+
+{% block content %}
+<h1>Delete this list?</h1>
+<p>All tasks in {{ tasklist.name }} will be deleted.</p>
+<form action="{{ tasklist.get_delete_url }}" method="post">
+    {% csrf_token %}
+    <input type="submit" value="Delete"/>
+</form>
+{% endblock %}

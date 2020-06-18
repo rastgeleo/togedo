@@ -28,6 +28,18 @@ class TaskList(models.Model):
             kwargs={'slug': self.slug}
             )
 
+    def get_update_url(self):
+        return reverse(
+            'todo:tasklist_update',
+            kwargs={'slug': self.slug}
+        )
+
+    def get_delete_url(self):
+        return reverse(
+            'todo:tasklist_delete',
+            kwargs={'slug': self.slug}
+        )
+
     def get_task_create_url(self):
         return reverse('todo:task_create', kwargs={'list_slug': self.slug})
 
@@ -72,14 +84,17 @@ class Task(models.Model):
             kwargs={'list_slug': self.tasklist.slug, 'task_slug': self.slug}
             )
 
-    # def get_create_url(self):
-    #     return reverse('todo:task_create')
+    def get_update_url(self):
+        return reverse(
+            'todo:task_update',
+            kwargs={'list_slug': self.tasklist.slug, 'task_slug': self.slug}
+        )
 
-    # def get_update_url(self):
-    #     return reverse('todo:task_update', kwargs={'slug': self.slug})
-
-    # def get_delete_url(self):
-    #     return reverse('todo:task_delete', kwargs={'slug': self.slug})
+    def get_delete_url(self):
+        return reverse(
+            'todo:task_delete',
+            kwargs={'list_slug': self.tasklist.slug, 'task_slug': self.slug}
+        )
 
     # def isoverdue(self):
     #     return (not self.completed) and (self.due < timezone.now())

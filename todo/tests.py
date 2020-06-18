@@ -3,10 +3,13 @@ from datetime import timedelta
 from django.test import TestCase
 from django.utils import timezone
 
-from .models import Task
+from .models import Task, TaskList
 
 
 class TaskMainTest(TestCase):
+
+    def setUp(self):
+        self.tasklist = TaskList.objects.create(name='my list')
 
     def test_uses_main_template(self):
         response = self.client.get('/')
@@ -14,9 +17,11 @@ class TaskMainTest(TestCase):
 
     def test_displays_uncompleted_items_only(self):
         Task.objects.create(
-            name='item1', slug='item1', text='item1', completed=False)
+            name='item1', slug='item1', text='item1', completed=False,
+            tasklist=self.tasklist)
         Task.objects.create(
-           name='item2', slug='item2', text='item2', completed=True)
+           name='item2', slug='item2', text='item2', completed=True,
+           tasklist=self.tasklist)
 
         response = self.client.get('/')
         self.assertIn('item1', response.content.decode())
@@ -28,7 +33,8 @@ class TaskMainTest(TestCase):
         data = {
             'name': 'item',
             'text': 'item text',
-            'due': time_str
+            'due': time_str,
+            'tasklist': self.tasklist
             }
         self.client.post('/', data=data)
         self.assertEqual(Task.objects.count(), 1)
@@ -45,6 +51,7 @@ class TaskMainTest(TestCase):
         data = {
             'name': 'item',
             'text': 'item text',
+            'tasklist': self.tasklist
             }
         response = self.client.post('/', data)
         self.assertEqual(response.status_code, 302)
@@ -55,51 +62,8 @@ class TaskMainTest(TestCase):
         self.assertEqual(Task.objects.count(), 0)
 
 
-class TaskOverdueTest(TestCase):
+class TaskListDeleteTest(TestCase):
 
-    def test_uses_list_template(self):
-        response = self.client.get('/todo/overdue/')
-        self.assertTemplateUsed(response, 'todo/task_list.html')
-
-    def test_display_overdue_task(self):
-        Task.objects.create(
-            name='overdue item',
-            text='a bit late',
-            slug='overdue-item',
-            due=timezone.now() - timedelta(days=3),
-            completed=False
-        )
-        Task.objects.create(
-            name='non overdue item',
-            text='a bit late',
-            slug='non-overdue-item',
-            due=timezone.now() + timedelta(days=3),
-            completed=False
-        )
-        response = self.client.get('/todo/overdue/')
-        self.assertIn('overdue item', response.content.decode())
-        self.assertNotIn('non overdue item', response.content.decode())
-
-
-class TaskModelTest(TestCase):
-
-    def test_saving_and_retrieving_items(self):
-        Task.objects.create(
-            name='First item',
-            slug='first-item',
-            text='First item text'
-        )
-
-        Task.objects.create(
-            name='Second item',
-            slug='second-item',
-            text='Second item text'
-        )
-
-        tasks = Task.objects.all()
-        self.assertEqual(tasks.count(), 2)
-
-        first_saved_item = tasks[0]
-        second_saved_item = tasks[1]
-        self.assertEqual(first_saved_item.name, 'First item')
-        self.assertEqual(second_saved_item.name, 'Second item')
+    def test_uses_delete_template(self):
+        response = self.client.get('todo:tasklist_delete')
+        self.assertTemplateUsed(response, 'todo/tasklist_confirm_delete.html')

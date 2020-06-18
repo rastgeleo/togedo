@@ -50,8 +50,7 @@ class TaskListForm(forms.ModelForm):
 
     def save(self, commit=True):
         tasklist = super().save(commit=False)
-        if not tasklist.pk:
-            tasklist.slug = slugify(tasklist.name)
+        tasklist.slug = slugify(tasklist.name)
         tasklist.save()
         self.save_m2m()
         return tasklist

@@ -6,9 +6,13 @@
 {% block content %}
 <h1>Todo Lists</h1>
 <ul>
+    <li><a href="{% url 'todo:tasklist_create' %}">Add a New List</a></li>
+</ul>
+<ul>
     {% for list in tasklist_list %}
     <li>
         <a href="{{ list.get_absolute_url }}">{{ list.name }}</a>
+        <a href="{{ list.get_delete_url }}">Delete</a>
     </li>
     {% empty %}
     <li>There is no existing list</li>

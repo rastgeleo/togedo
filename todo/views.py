@@ -44,6 +44,17 @@ class TaskListCreate(CreateView):
     form_class = TaskListForm
 
 
+class TaskListUpdate(UpdateView):
+    model = TaskList
+    form_class = TaskListForm
+    template_name = 'todo/tasklist_update_form.html'
+
+
+class TaskListDelete(DeleteView):
+    model = TaskList
+    success_url = reverse_lazy('todo:tasklist_list')
+
+
 class TaskDetail(DetailView):
     model = Task
     slug_url_kwarg = 'task_slug'
@@ -56,6 +67,9 @@ class TaskCreate(CreateView):
     tasklist_slug_url_kwarg = 'list_slug'
 
     def get_initial(self):
+        """
+        Infer tasklist from url kwargs.
+        """
         list_slug = self.kwargs.get('list_slug')
         tasklist = get_object_or_404(TaskList, slug__iexact=list_slug)
         initial = {'tasklist': tasklist}
@@ -75,13 +89,17 @@ class TaskCreate(CreateView):
         return super().get_context_data(**context)
 
 
+class TaskUpdate(UpdateView):
+    model = Task
+    form_class = TaskUpdateForm
+    slug_url_kwarg = 'task_slug'
+    template_name_suffix = '_update_form'
 
-# class TaskUpdate(UpdateView):
-#     model = Task
-#     form_class = TaskUpdateForm
-#     template_name_suffix = '_update_form'
 
+class TaskDelete(DeleteView):
+    model = Task
+    slug_url_kwarg = 'task_slug'
 
-# class TaskDelete(DeleteView):
-#     model = Task
-#     success_url = reverse_lazy('todo:task_list')
+    def get_success_url(self):
+        redirect_url = self.object.tasklist.get_absolute_url()
+        return redirect_url
