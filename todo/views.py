@@ -7,6 +7,7 @@ from django.views.generic import ListView, CreateView, DetailView, UpdateView,\
 
 from .models import Task, TaskList
 from .forms import TaskForm, TaskUpdateForm, TaskListForm
+from .utils import TaskGetObjectMixin, TaskListContextMixin
 
 
 class TaskMain(View):
@@ -55,50 +56,34 @@ class TaskListDelete(DeleteView):
     success_url = reverse_lazy('todo:tasklist_list')
 
 
-class TaskDetail(DetailView):
-    model = Task
-    slug_url_kwarg = 'task_slug'
-
-
-class TaskCreate(CreateView):
+class TaskCreate(TaskListContextMixin, CreateView):
     model = Task
     form_class = TaskForm
-    tasklist_context_object_name = 'tasklist'
     tasklist_slug_url_kwarg = 'list_slug'
 
     def get_initial(self):
         """
-        Infer tasklist from url kwargs.
+        set initial tasklist from url kwargs.
         """
-        list_slug = self.kwargs.get('list_slug')
-        tasklist = get_object_or_404(TaskList, slug__iexact=list_slug)
-        initial = {'tasklist': tasklist}
+        list_slug = self.kwargs.get(self.tasklist_slug_url_kwarg)
+        self.tasklist = get_object_or_404(TaskList, slug__iexact=list_slug)
+        initial = {'tasklist': self.tasklist}
         initial.update(self.initial)
         return initial
 
-    def get_context_data(self, **kwargs):
-        """
-        Add tasklist to context to get access to tasklist model methods.
-        """
-        tasklist_slug = self.kwargs.get(self.tasklist_slug_url_kwarg)
-        tasklist = get_object_or_404(TaskList, slug__iexact=tasklist_slug)
-        context = {
-            self.tasklist_context_object_name: tasklist
-        }
-        context.update(kwargs)
-        return super().get_context_data(**context)
+
+class TaskDetail(TaskGetObjectMixin, DetailView):
+    model = Task
 
 
-class TaskUpdate(UpdateView):
+class TaskUpdate(TaskGetObjectMixin, UpdateView):
     model = Task
     form_class = TaskUpdateForm
-    slug_url_kwarg = 'task_slug'
     template_name_suffix = '_update_form'
 
 
-class TaskDelete(DeleteView):
+class TaskDelete(TaskGetObjectMixin, DeleteView):
     model = Task
-    slug_url_kwarg = 'task_slug'
 
     def get_success_url(self):
         redirect_url = self.object.tasklist.get_absolute_url()

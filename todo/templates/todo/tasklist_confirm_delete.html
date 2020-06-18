@@ -9,6 +9,7 @@
 <p>All tasks in {{ tasklist.name }} will be deleted.</p>
 <form action="{{ tasklist.get_delete_url }}" method="post">
     {% csrf_token %}
+    <a href="{% url 'todo:tasklist_list' %}">Cancel</a>
     <input type="submit" value="Delete"/>
 </form>
 {% endblock %}

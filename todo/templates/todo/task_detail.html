@@ -9,6 +9,7 @@
 <ul>
     <li><a href="{{ task.get_update_url }}">Edit</a></li>
     <li><a href="{{ task.get_delete_url }}">Delete</a></li>
+    <li><a href="{{ task.tasklist.get_absolute_url }}">Go back to {{ task.tasklist.name}}</a></li>
 </ul>
 <p> {{ task.text }} </p>
 {% if task.due %}

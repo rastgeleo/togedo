@@ -12,6 +12,9 @@
     <li>
         <a href="{{ tasklist.get_update_url }}">Edit List</a>
     </li>
+    <li>
+        <a href="{{ tasklist.get_delete_url }}">Delete List</a>
+    </li>
 </ul>
 <ul>
     {% for task in tasklist.task_set.all %}

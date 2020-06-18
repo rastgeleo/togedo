@@ -43,12 +43,14 @@ class TaskList(models.Model):
     def get_task_create_url(self):
         return reverse('todo:task_create', kwargs={'list_slug': self.slug})
 
+    class Meta:
+        ordering = ['-createdat']
+
 
 class Task(models.Model):
     name = models.CharField(max_length=63)
     slug = models.SlugField(
-        max_length=63,
-        unique=True
+        max_length=63
     )
     text = models.TextField(
         'description',
@@ -62,6 +64,10 @@ class Task(models.Model):
         'date due',
         null=True,
         blank=True
+    )
+    is_important = models.BooleanField(
+        'important',
+        default=False
     )
     completed = models.BooleanField(
         'completed',
@@ -96,6 +102,6 @@ class Task(models.Model):
             kwargs={'list_slug': self.tasklist.slug, 'task_slug': self.slug}
         )
 
-    # def isoverdue(self):
-    #     return (not self.completed) and (self.due < timezone.now())
-
+    class Meta:
+        ordering = ['-createdat']
+        unique_together = ('slug', 'tasklist')
