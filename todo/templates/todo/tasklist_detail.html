@@ -3,31 +3,60 @@
 {{ block.super }} - List:{{ tasklist.name }}
 {% endblock %}
 
+
 {% block content %}
-<h1>List: {{ tasklist.name|title }}</h1>
-<ul>
-    <li>
-        <a href="{{ tasklist.get_task_create_url }}">Add a New Task</a>
-    </li>
-    <li>
-        <a href="{{ tasklist.get_update_url }}">Edit List</a>
-    </li>
-    <li>
-        <a href="{{ tasklist.get_delete_url }}">Delete List</a>
-    </li>
-</ul>
-<ul>
-    {% for task in tasklist.task_set.all %}
-    <li>
-        <a href="{{ task.get_absolute_url }}">{{ task.name }}</a>
-        {% if task.due %} 
-            Due: {{ task.due|date:"H:i l jS N Y" }} 
-        {% endif %}
-        <a href="{{ task.get_update_url }}">Edit</a>
-        <a href="{{ task.get_delete_url }}">Delete</a>
-    </li>
-    {% empty %}
-    <li>There is no task in this list.</li>
-    {% endfor %}
-</ul>
+<div class="columns">
+    <div class="column is-8 is-offset-2">
+        <div class="panel is-info">
+            <p class="panel-heading">
+              {{ tasklist.name }}
+            </p>
+            {% for task in tasklist.task_set.all %}
+            <div href="{{ list.get_absolute_url }}" class="panel-block">
+                <div class="content container ">
+                    <p><strong>{{ task.name }}</strong></p>
+                    {% if task.due %} 
+                    <p>Due: {{ task.due|date:"H:i l jS N Y" }}</p>
+                    {% endif %}
+                    <p>{{ task.text }}</p>
+
+                    <nav class="level is-mobile">
+                        <div class="level-left">
+                            <a href="" class="level-item" aria-label="complete">
+                                <span class="icon is-small has-text-info">
+                                    <i class="fas fa-check" aria-hidden="true"></i>
+                                </span>
+                            </a>
+                        </div>
+                        <div class="level-right">
+                            <a href="{{ task.get_update_url }}" class="level-item" aria-label="update">
+                                <span class="icon is-small has-text-info">
+                                    <i class="fas fa-edit" aria-hidden="true"></i>
+                                </span>
+                            </a>
+                            <a href="{{ task.get_delete_url}}" class="level-item" aria-label="delete">
+                                <span class="icon is-small has-text-info">
+                                    <i class="far fa-trash-alt" aria-hidden="true"></i>
+                                </span>
+                            </a>
+                        </div>
+                    </nav>
+                    
+                </div>
+            </div>
+            {% empty %}
+            <p class="panel-block">
+                Add a New Task
+            </p>
+            {% endfor %}
+            <div class="panel-block">
+                <a href="{{ tasklist.get_task_create_url }}" class="button is-info is-outlined is-fullwidth">
+                    <span class="icon"><i class="fas fa-plus"></i></span>
+                    <span>Add a New Task</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
 {% endblock %}

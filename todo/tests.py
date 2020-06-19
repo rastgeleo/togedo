@@ -44,7 +44,17 @@ class TaskMainTest(TestCase):
         self.assertEqual(Task.objects.count(), 0)
 
 
-class NewListTest(TestCase):
+class NewTaskListTest(TestCase):
+
+    # def test_uses_taskdetail_template(self):
+    #     new_list = TaskList.objects.create(
+    #         name='new list', slug='new-list')
+    #     response = self.client.get(f'/list/{new_list.slug}/')
+    #     self.assertTemplateUsed(response, 'todo/tasklist_detail.html')
+
+    def test_uses_task_create_template(self):
+        response = self.client.get('/list/create/')
+        self.assertTemplateUsed(response, 'todo/tasklist_form.html')
 
     def test_can_save_a_POST_request(self):
         self.client.post('/list/create/', data={'name': 'new list'})
@@ -59,7 +69,39 @@ class NewListTest(TestCase):
         self.assertRedirects(response, f'/list/{new_list.slug}/')
 
 
-class TaskListTest(TestCase):
+class TaskListViewTest(TestCase):
+
+    def setUp(self):
+        lists = []
+        for i in range(5):
+            tasklist = TaskList(name=f'list{i}', slug=f'list-{i}')
+            lists.append(tasklist)
+        TaskList.objects.bulk_create(lists)
+
+    def test_uses_task_list_template(self):
+        response = self.client.get('/list/')
+        self.assertTemplateUsed(response, 'todo/tasklist_list.html')
+
+    def test_displays_task_lists(self):
+        lists = TaskList.objects.all()
+        response = self.client.get('/list/')
+
+        for list_ in lists:
+            self.assertContains(response, list_.name)
+
+    def test_not_displays_deleted_lists(self):
+        list_ = TaskList.objects.first()
+        list_.delete()
+        response = self.client.get('/list/')
+
+        self.assertNotContains(response, list_.name)
+
+   
+
+
+
+
+class TaskListModelTest(TestCase):
     def test_saving_and_retrieving_tasklist(self):
         new_list = TaskList()
         new_list.name = 'new list'

@@ -4,18 +4,32 @@
 {% endblock %}
 
 {% block content %}
-<h1>Todo Lists</h1>
-<ul>
-    <li><a href="{% url 'todo:tasklist_create' %}">Start a New List</a></li>
-</ul>
-<ul>
-    {% for list in tasklist_list %}
-    <li>
-        <a href="{{ list.get_absolute_url }}">{{ list.name }}</a>
-        <a href="{{ list.get_delete_url }}">Delete</a>
-    </li>
-    {% empty %}
-    <li>There is no existing list</li>
-    {% endfor %}
-</ul>
+<div class="columns">
+    <div class="column is-offset-2 is-8">
+        <div class="panel is-primary">
+            <p class="panel-heading">
+              TODO LISTS
+            </p>
+            {% for list in tasklist_list %}
+            <a href="{{ list.get_absolute_url }}" class="panel-block">
+              <span class="panel-icon">
+                <i class="fas fa-book" aria-hidden="true"></i>
+              </span>
+              {{ list.name }}
+            </a>
+            {% empty %}
+            <p class="panel-block">
+                Start a new list
+            </p>
+            {% endfor %}
+            <div class="panel-block">
+                <a href="{% url 'todo:tasklist_create' %}" class="button is-info is-outlined is-fullwidth">
+                    <span class="icon"><i class="fas fa-plus"></i></span>
+                    <span>Add a New List</span>
+                </a>
+              </div>
+        </div>
+    </div>
+
+</div>
 {% endblock %}
