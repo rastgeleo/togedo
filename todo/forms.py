@@ -14,11 +14,14 @@ class TaskForm(forms.ModelForm):
         exclude = ('slug', 'completed')
         widgets = {
             'name': forms.TextInput(attrs={
-                'placeholder': 'Add a task'}),
+                'placeholder': 'Add a task',
+                'class': 'input'}),
             'text': forms.Textarea(attrs={
-                'placeholder': 'Add a description'}),
+                'placeholder': 'Add a description',
+                'class': 'textarea'}),
             'due': forms.DateTimeInput(attrs={
-                'placeholder': 'YYYY-MM-DD HH:MM:SS'})
+                'placeholder': 'YYYY-MM-DD HH:MM:SS',
+                'class': 'input'})
         }
 
     def save(self, commit=True):
