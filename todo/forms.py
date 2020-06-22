@@ -43,6 +43,11 @@ class TaskListForm(forms.ModelForm):
     class Meta:
         model = TaskList
         exclude = ('slug',)
+        widgets = {
+            'name': forms.TextInput(attrs={
+                'placeholder': 'Add a List',
+                'class': 'input'})
+        }
 
     def clean_name(self):
         new_name = self.cleaned_data['name']

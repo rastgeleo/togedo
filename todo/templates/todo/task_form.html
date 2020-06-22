@@ -5,9 +5,60 @@
 {% endblock %}
 
 {% block content %}
-<form action="{{ tasklist.get_task_create_url }}" method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Add Task"/>
-</form>
+<div class="columns">
+    <div class="column is-offset-2 is-8">
+        <form action="{{ tasklist.get_task_create_url }}" method="post">
+            {% csrf_token %}
+            <div class="field">
+                <label for="{{ form.name.id_for_label }}" class="label">Name</label>
+                <div class="control">
+                  {{ form.name }}
+                </div>
+            </div>
+            
+              <div class="field">
+                <label for="{{ form.text.id_for_label }}" class="label">Description</label>
+                <div class="control">
+                  {{ form.text}}
+                </div>
+            </div>
+            
+            <div class="field">
+                <label for="{{ form.due.id_for_label }}" class="label">Date Due</label>
+                <div class="control">
+                  {{ form.due }}
+                </div>
+            </div>
+            
+              <div class="field">
+                <label for="{{ form.tasklist.id_for_label }}" class="label">List</label>
+                <div class="control">
+                  <div class="select">
+                    {{ form.tasklist }}
+                  </div>
+                </div>
+            </div>
+            
+              
+            <div class="field">
+                <div class="control">
+                  <label for="{{ form.tasklist.id_for_label }}" class="checkbox">
+                    {{ form.is_important }}
+                    Important
+                  </label>
+                </div>
+            </div>
+            
+            <div class="field is-grouped">
+                <div class="control">
+                  <input type="submit" class="button is-link" value="Save Change"/>
+                </div>
+                <div class="control">
+                  <a class="button is-link is-light" href="{{ tasklist.get_absolute_url }}">Cancel</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
 {% endblock %}
+

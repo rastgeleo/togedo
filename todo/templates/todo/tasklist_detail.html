@@ -14,7 +14,7 @@
             {% for task in tasklist.task_set.all %}
             <div href="{{ list.get_absolute_url }}" class="panel-block is-block">
                 <div class="content">
-                    <div class="level">
+                    <div class="level is-mobile">
                         <div class="level-left">
                             <p class="is-size-5 level-item" ><strong>{{ task.name }}</strong></p>    
                         </div>
@@ -69,14 +69,28 @@
                 </div>
             </div>
             {% empty %}
-            <p class="panel-block">
-                Add a New Task
-            </p>
+            <div class="panel-block is-block">
+                <p class="has-text-centered">
+                    This list is empty.
+                </p>
+            </div>
             {% endfor %}
             <div class="panel-block">
                 <a href="{{ tasklist.get_task_create_url }}" class="button is-info is-outlined is-fullwidth">
                     <span class="icon"><i class="fas fa-plus"></i></span>
                     <span>Add a New Task</span>
+                </a>
+            </div>
+            <div class="panel-block">
+                <a href="{{ tasklist.get_delete_url }}" class="button is-info is-outlined is-fullwidth">
+                    <span class="icon"><i class="far fa-trash-alt"></i></span>
+                    <span>Delete This List</span>
+                </a>
+            </div>
+            <div class="panel-block">
+                <a href="{{ tasklist.get_update_url }}" class="button is-info is-outlined is-fullwidth">
+                    <span class="icon"><i class="far fa-edit"></i></span>
+                    <span>Rename This List</span>
                 </a>
             </div>
         </div>

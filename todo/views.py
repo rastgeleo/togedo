@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.core.exceptions import ImproperlyConfigured
 from django.utils import timezone
 from django.urls import reverse_lazy
 from django.views.generic import View
@@ -59,6 +60,7 @@ class TaskListDelete(DeleteView):
 class TaskCreate(TaskListContextMixin, CreateView):
     model = Task
     form_class = TaskForm
+    success_url = reverse_lazy('todo:tasklist_list', )
     tasklist_slug_url_kwarg = 'list_slug'
 
     def get_initial(self):
@@ -71,6 +73,15 @@ class TaskCreate(TaskListContextMixin, CreateView):
         initial.update(self.initial)
         return initial
 
+    def get_success_url(self):
+        try:
+            url = self.object.tasklist.get_absolute_url()
+        except AttributeError:
+            raise ImproperlyConfigured(
+                "No URL to redirect to.  Either provide a url or define"
+                " a get_absolute_url method on the Model.")
+        return url
+
 
 class TaskDetail(TaskGetObjectMixin, DetailView):
     model = Task
@@ -80,6 +91,15 @@ class TaskUpdate(TaskGetObjectMixin, UpdateView):
     model = Task
     form_class = TaskUpdateForm
     template_name_suffix = '_update_form'
+
+    def get_success_url(self):
+        try:
+            url = self.object.tasklist.get_absolute_url()
+        except AttributeError:
+            raise ImproperlyConfigured(
+                "No URL to redirect to.  Either provide a url or define"
+                " a get_absolute_url method on the Model.")
+        return url
 
 
 class TaskDelete(TaskGetObjectMixin, DeleteView):

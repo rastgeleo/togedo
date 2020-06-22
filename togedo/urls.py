@@ -15,11 +15,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.views.generic import RedirectView
 
-from todo import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('list/', include('todo.urls')),
-    path('', views.TaskMain.as_view(), name='task_main')
+    path('', RedirectView.as_view(pattern_name="todo:tasklist_list"))
 ]
