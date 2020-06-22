@@ -12,23 +12,47 @@
               {{ tasklist.name }}
             </p>
             {% for task in tasklist.task_set.all %}
-            <div href="{{ list.get_absolute_url }}" class="panel-block">
-                <div class="content container ">
-                    <p><strong>{{ task.name }}</strong></p>
-                    {% if task.due %} 
-                    <p>Due: {{ task.due|date:"H:i l jS N Y" }}</p>
-                    {% endif %}
+            <div href="{{ list.get_absolute_url }}" class="panel-block is-block">
+                <div class="content">
+                    <div class="level">
+                        <div class="level-left">
+                            <p class="is-size-5 level-item" ><strong>{{ task.name }}</strong></p>    
+                        </div>
+                        <div class="level-right">
+                            <a href="" class="level-item" aria-label="important">
+                                <span class="icon is-small has-text-warning">
+                                    {% if task.is_important %}
+                                    <i class="fas fa-star" aria-hidden="true"></i>
+                                    {% else %}
+                                    <i class="far fa-star" aria-hidden="true"></i>
+                                    {% endif %}
+                                </span>
+                            </a>
+                        </div>
+                    </div>
+                    
                     <p>{{ task.text }}</p>
 
                     <nav class="level is-mobile">
                         <div class="level-left">
+                            {% if task.due %}
+                            <a href="" class="level-item" aria-label="complete">
+                                <span class="icon is-small has-text-info">
+                                    <i class="far fa-clock" aria-hidden="true"></i>
+                                </span>
+                                
+                            </a>
+                            <span>
+                                {{ task.due|date:"H:i l jS N Y" }}
+                            </span>
+                            {% endif %}
+                        </div>
+                        <div class="level-right has-text-right">
                             <a href="" class="level-item" aria-label="complete">
                                 <span class="icon is-small has-text-info">
                                     <i class="fas fa-check" aria-hidden="true"></i>
                                 </span>
                             </a>
-                        </div>
-                        <div class="level-right">
                             <a href="{{ task.get_update_url }}" class="level-item" aria-label="update">
                                 <span class="icon is-small has-text-info">
                                     <i class="fas fa-edit" aria-hidden="true"></i>
