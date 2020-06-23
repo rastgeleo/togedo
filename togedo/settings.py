@@ -39,8 +39,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'todo',
 ]
-if not os.environ.get("DEBUG_FALSE"):
-    INSTALLED_APPS += ['django_extensions']
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
