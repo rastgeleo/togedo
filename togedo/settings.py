@@ -25,7 +25,7 @@ SECRET_KEY = 'dxh+ajuyra4i&74ponn2=reliizy1#c(!0jeww136%b@fr2vz9'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['codingpug.co.uk']
 
 
 # Application definition
