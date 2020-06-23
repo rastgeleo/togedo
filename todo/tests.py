@@ -3,47 +3,6 @@ from django.test import TestCase
 from .models import Task, TaskList
 
 
-class TaskMainTest(TestCase):
-
-    def test_displays_task(self):
-        new_list = TaskList.objects.create(name='new list', slug='new-list')
-        Task.objects.create(
-            name='new task',
-            slug='new-task',
-            tasklist=new_list)
-
-        response = self.client.get('/')
-        self.assertContains(response, 'new task')
-
-    def test_can_save_a_POST_request(self):
-        new_list = TaskList.objects.create(name='new list', slug='new-list')
-        data = {
-            'name': 'item',
-            'text': 'item text',
-            'tasklist': new_list.pk
-            }
-        self.client.post('/', data=data)
-
-        new_item = Task.objects.first()
-        self.assertEqual(Task.objects.count(), 1)
-        self.assertEqual(new_item.text, 'item text')
-
-    def test_redirects_after_POST(self):
-        new_list = TaskList.objects.create(name='new list', slug='new-list')
-        data = {
-            'name': 'item',
-            'text': 'item text',
-            'tasklist': new_list.pk
-            }
-        response = self.client.post('/', data=data)
-
-        self.assertRedirects(response, '/')
-
-    def test_only_saves_items_when_POST(self):
-        self.client.get('/')
-        self.assertEqual(Task.objects.count(), 0)
-
-
 class NewTaskListTest(TestCase):
 
     # def test_uses_taskdetail_template(self):
@@ -95,10 +54,6 @@ class TaskListViewTest(TestCase):
         response = self.client.get('/list/')
 
         self.assertNotContains(response, list_.name)
-
-   
-
-
 
 
 class TaskListModelTest(TestCase):

@@ -7,9 +7,9 @@
 <div class="columns">
     <div class="column is-offset-2 is-8">
         <div class="panel is-primary">
-            <p class="panel-heading">
+            <h1 class="panel-heading">
               TODO LISTS
-            </p>
+            </h1>
             {% for list in tasklist_list %}
             <a href="{{ list.get_absolute_url }}" class="panel-block">
               <span class="panel-icon">
@@ -23,7 +23,7 @@
             </p>
             {% endfor %}
             <div class="panel-block">
-                <a href="{% url 'todo:tasklist_create' %}" class="button is-info is-outlined is-fullwidth">
+                <a id="id_new_list" href="{% url 'todo:tasklist_create' %}" class="button is-info is-outlined is-fullwidth">
                     <span class="icon"><i class="fas fa-plus"></i></span>
                     <span>Add a New List</span>
                 </a>

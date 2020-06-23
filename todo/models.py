@@ -9,6 +9,7 @@ class TaskList(models.Model):
         max_length=63,
         unique=True
     )
+    # TODO: different user should be able to make tasklist with same name.
     slug = models.SlugField(
         'slug for list',
         max_length=63,

@@ -8,9 +8,9 @@
 <div class="columns">
     <div class="column is-8 is-offset-2">
         <div class="panel is-info">
-            <p class="panel-heading">
+            <h1 class="panel-heading">
               {{ tasklist.name }}
-            </p>
+            </h1>
             {% for task in tasklist.task_set.all %}
             <div href="{{ list.get_absolute_url }}" class="panel-block is-block">
                 <div class="content">
@@ -76,19 +76,19 @@
             </div>
             {% endfor %}
             <div class="panel-block">
-                <a href="{{ tasklist.get_task_create_url }}" class="button is-info is-outlined is-fullwidth">
+                <a id="id_new_task" href="{{ tasklist.get_task_create_url }}" class="button is-info is-outlined is-fullwidth">
                     <span class="icon"><i class="fas fa-plus"></i></span>
                     <span>Add a New Task</span>
                 </a>
             </div>
             <div class="panel-block">
-                <a href="{{ tasklist.get_delete_url }}" class="button is-info is-outlined is-fullwidth">
+                <a id="id_delete_list" href="{{ tasklist.get_delete_url }}" class="button is-info is-outlined is-fullwidth">
                     <span class="icon"><i class="far fa-trash-alt"></i></span>
                     <span>Delete This List</span>
                 </a>
             </div>
             <div class="panel-block">
-                <a href="{{ tasklist.get_update_url }}" class="button is-info is-outlined is-fullwidth">
+                <a id="id_update_list" href="{{ tasklist.get_update_url }}" class="button is-info is-outlined is-fullwidth">
                     <span class="icon"><i class="far fa-edit"></i></span>
                     <span>Rename This List</span>
                 </a>
